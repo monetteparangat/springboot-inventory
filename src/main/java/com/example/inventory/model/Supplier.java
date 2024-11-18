@@ -40,7 +40,4 @@ public class Supplier {
 	@OneToMany(mappedBy = "supplier")
 	private List<Product> products; // List of products supplied by this supplier
 
-	@OneToMany(mappedBy = "supplier")
-	Product product;
-
 }
