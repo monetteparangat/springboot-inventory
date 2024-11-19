@@ -2,7 +2,7 @@ package com.example.inventory.repository;
 
 import java.util.List;
 
-import com.example.inventory.model.Order;
+import com.example.inventory.model.Orders;
 import com.example.inventory.model.OrderItem;
 
 public class OrderItemRepository {

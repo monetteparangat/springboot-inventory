@@ -4,21 +4,21 @@ import java.util.List;
 
 import com.example.inventory.model.Orders;
 
-public class OrderRepository {
+public class OrdersRepository {
 
-	public List<Orders> findAll() {
+	public List<Orders> findAll(){
 		return null;
 	}
-
+	
 	public Orders findById(Long id) {
 		return null;
 	}
-
+	
 	public Orders save(Orders order) {
 		return null;
 	}
-
-	public Orders deleteById(Long id) {
-		return null;
+	
+	public void deleteById(Long id) {
+		
 	}
 }

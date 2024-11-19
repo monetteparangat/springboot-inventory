@@ -35,5 +35,5 @@ public class Customer {
 	private String accountType; // e.g., "regular", "wholesale"
 
 	@OneToMany(mappedBy = "customer")
-	private List<Order> orders; // List of orders placed by the customer
+	private List<Orders> orders; // List of orders placed by the customer
 }

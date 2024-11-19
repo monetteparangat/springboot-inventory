@@ -6,30 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.inventory.model.Orders;
-import com.example.inventory.repository.OrderRepository;
+import com.example.inventory.repository.OrdersRepository;
 
 @Service
-public class OrderService {
+public class OrdersService {
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrdersRepository orderRepository;
 
 	public List<Orders> getAllOrders() {
 		return orderRepository.findAll();
 	}
 
-	public Orders getOrderById(Long id) {
-		return orderRepository.findById(id);
+	public Orders getOrderById(Long orderId) {
+		return orderRepository.findById(orderId);
 	}
 
 	public Orders addOrder(Orders order) {
 		return orderRepository.save(order);
 	}
 
-	public Orders updateOrder(Long id, Orders updatedOrder) {
-		Orders existingOrder = orderRepository.findById(id);
+	public Orders updateOrder(Long orderId, Orders updatedOrder) {
+		Orders existingOrder = orderRepository.findById(orderId);
 
-		// ADd validation if exists
 		existingOrder.setCustomer(updatedOrder.getCustomer());
 		existingOrder.setOrderDate(updatedOrder.getOrderDate());
 		existingOrder.setOrderStatus(updatedOrder.getOrderStatus());
@@ -42,9 +41,8 @@ public class OrderService {
 
 		return orderRepository.save(existingOrder);
 	}
-	
-	public void deleteOrder(Long id) {
-		orderRepository.deleteById(id);
-	}
 
+	public void deleteOrder(Long orderId) {
+		orderRepository.deleteById(orderId);
+	}
 }
