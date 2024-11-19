@@ -15,6 +15,6 @@ public class SupplierDTO {
 	private String paymentTerms;
 	private String productCategories;
 	private int leadTime;
-	private double discountRates;
+	private String discountRates;
 	private String status;
 }
