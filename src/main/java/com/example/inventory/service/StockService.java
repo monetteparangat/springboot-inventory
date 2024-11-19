@@ -2,13 +2,17 @@ package com.example.inventory.service;
 
 import com.example.inventory.model.StockMovement;
 import com.example.inventory.repository.StockMovementRepository;
+import com.example.inventory.dto.StockMovementDTO;
 import com.example.inventory.model.Product;
 import com.example.inventory.repository.ProductRepository;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StockService {
@@ -19,39 +23,51 @@ public class StockService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	public List<StockMovement> getAllStockMovements() {
-		return stockMovementRepository.findAll();
+	@Autowired
+	private ModelMapper modelMapper;
+
+	public List<StockMovementDTO> getAllStockMovements() {
+		List<StockMovement> stocks = stockMovementRepository.findAll();
+		List<StockMovementDTO> stockMovementDTO = stocks.stream()
+				.map(stock -> modelMapper.map(stock, StockMovementDTO.class)).collect(Collectors.toList());
+		return stockMovementDTO;
 	}
 
-	public Optional<StockMovement> getStockMovementById(Long stockMovementId) {
-		return stockMovementRepository.findById(stockMovementId);
+	public StockMovementDTO getStockMovementById(Long stockMovementId) {
+		StockMovement stockMovement = stockMovementRepository.findById(stockMovementId)
+				.orElseThrow(() -> new RuntimeException("StockMovement not found"));
+		StockMovementDTO stockMovementDTO = modelMapper.map(stockMovement, StockMovementDTO.class);
+		return stockMovementDTO;
 	}
 
-	public StockMovement addStockMovement(StockMovement stockMovement) {
-		// Adjust product stock based on movement type
-		Optional<Product> productOpt = productRepository.findById(stockMovement.getProduct().getProductId());
-		if (productOpt.isPresent()) {
-			Product product = productOpt.get();
-			switch (stockMovement.getTransactionType()) {
-			case "purchase":
-				product.setQuantity(product.getQuantity() + stockMovement.getQuantityChanged());
-				break;
-			case "sale":
-				product.setQuantity(product.getQuantity() - stockMovement.getQuantityChanged());
-				break;
-			case "adjustment":
-				product.setQuantity(product.getQuantity() + stockMovement.getQuantityChanged());
-				break;
-			default:
-				throw new IllegalArgumentException("Invalid transaction type");
-			}
-			productRepository.save(product);
-		}
+	public StockMovementDTO addStockMovement(StockMovementDTO stockMovementDTO) {
 
-		return stockMovementRepository.save(stockMovement);
+		StockMovement stockMovement = modelMapper.map(stockMovementDTO, StockMovement.class);
+		stockMovement.setProduct(productRepository.findById(stockMovementDTO.getProductId())
+				.orElseThrow(() -> new RuntimeException("Product not found")));
+
+		StockMovement savedStockMovement = stockMovementRepository.save(stockMovement);
+		return modelMapper.map(savedStockMovement, StockMovementDTO.class);
+
+	}
+
+	public StockMovementDTO updateStockMovement(Long id, StockMovementDTO stockMovementDTO) {
+		StockMovement existingStockMovement = stockMovementRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("StockMovement not found"));
+
+		existingStockMovement.setProduct(productRepository.findById(stockMovementDTO.getProductId())
+				.orElseThrow(() -> new RuntimeException("Product not found")));
+		existingStockMovement.setQuantityChanged(stockMovementDTO.getQuantityChanged());
+		existingStockMovement.setDate(stockMovementDTO.getDate());
+
+		StockMovement updatedStockMovement = stockMovementRepository.save(existingStockMovement);
+		return modelMapper.map(updatedStockMovement, StockMovementDTO.class);
 	}
 
 	public void deleteStockMovement(Long stockMovementId) {
+		if (!stockMovementRepository.existsById(stockMovementId)) {
+			throw new RuntimeException("StockMovement not found");
+		}
 		stockMovementRepository.deleteById(stockMovementId);
 	}
 }
