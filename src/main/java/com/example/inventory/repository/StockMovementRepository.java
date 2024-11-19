@@ -14,11 +14,11 @@ public class StockMovementRepository {
 		return null;
 	}
 
-	public StockMovement save(StockMovement stockMovemet) {
+	public StockMovement save(StockMovement stockMovement) {
 		return null;
 	}
 
-	public void delete(Long id) {
-		
+	public void deleteById(Long id) {
+
 	}
 }

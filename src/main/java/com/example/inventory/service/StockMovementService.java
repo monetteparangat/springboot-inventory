@@ -42,7 +42,7 @@ public class StockMovementService {
 	}
 
 	public void deleteStockMovementById(Long id) {
-		stockMovementRepository.delete(id);
+		stockMovementRepository.deleteById(id);
 	}
 
 }
