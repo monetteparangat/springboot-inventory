@@ -1,8 +1,14 @@
 package com.example.inventory.dto;
 
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 
 	private Long id;
@@ -18,7 +24,7 @@ public class ProductDTO {
 	private Long supplierId;
 	private String barcode;
 	private String location;
-	private String dateAdded;
-	private String lastUpdated;
-	
+	private LocalDateTime dateAdded;
+	private LocalDateTime lastUpdated;
+
 }
