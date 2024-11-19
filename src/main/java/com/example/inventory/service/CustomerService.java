@@ -2,10 +2,13 @@ package com.example.inventory.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.inventory.dto.CustomerDTO;
 import com.example.inventory.model.Customer;
 import com.example.inventory.model.Product;
 import com.example.inventory.repository.CustomerRepository;
@@ -15,35 +18,52 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	@Autowired
+	private ModelMapper modelMapper;
 
-	public List<Customer> getAllCustomers() {
-		return customerRepository.findAll();
+	public List<CustomerDTO> getAllCustomers() {
+		List<Customer> customers = customerRepository.findAll();
+		List<CustomerDTO> customersDTO = customers.stream()
+				.map(customer -> modelMapper.map(customer, CustomerDTO.class)).collect(Collectors.toList());
+		return customersDTO;
 	}
 
-	public Optional<Customer> getCustomerById(Long customerId) {
-		return customerRepository.findById(customerId);
+	public CustomerDTO getCustomerById(Long customerId) {
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new RuntimeException("Customer not found"));
+
+		CustomerDTO customerDTO = modelMapper.map(customer, CustomerDTO.class);
+		return customerDTO;
 	}
 
-	public Customer addCustomer(Customer customer) {
-		return customerRepository.save(customer);
+	public CustomerDTO addCustomer(CustomerDTO customerDTO) {
+		Customer customer = modelMapper.map(customerDTO, Customer.class);
+		Customer saveCustomer = customerRepository.save(customer);
+		CustomerDTO savedCustomerDTO = modelMapper.map(saveCustomer, CustomerDTO.class);
+		return savedCustomerDTO;
 	}
 
-	public Customer updateCustomer(Long customerId, Customer updatedCustomer) {
+	public CustomerDTO updateCustomer(Long customerId, CustomerDTO updatedCustomerDTO) {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new RuntimeException("Customer not found"));
 
 		// Update fields of the existing customer
-		existingCustomer.setName(updatedCustomer.getName());
-		existingCustomer.setEmail(updatedCustomer.getEmail());
-		existingCustomer.setPhoneNumber(updatedCustomer.getPhoneNumber());
-		existingCustomer.setBillingAddress(updatedCustomer.getBillingAddress());
-		existingCustomer.setShippingAddress(updatedCustomer.getShippingAddress());
-		existingCustomer.setAccountType(updatedCustomer.getAccountType());
+		existingCustomer.setName(updatedCustomerDTO.getName());
+		existingCustomer.setEmail(updatedCustomerDTO.getEmail());
+		existingCustomer.setPhoneNumber(updatedCustomerDTO.getPhoneNumber());
+		existingCustomer.setBillingAddress(updatedCustomerDTO.getBillingAddress());
+		existingCustomer.setShippingAddress(updatedCustomerDTO.getShippingAddress());
+		existingCustomer.setAccountType(updatedCustomerDTO.getAccountType());
 
-		return customerRepository.save(existingCustomer);
+		Customer savedCustomer = customerRepository.save(existingCustomer);
+		CustomerDTO savedCustomerDTO = modelMapper.map(savedCustomer, CustomerDTO.class);
+
+		return savedCustomerDTO;
 	}
 
 	public void deleteCustomer(Long customerId) {
-		customerRepository.deleteById(customerId);
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new RuntimeException("Customer not found"));
+		customerRepository.delete(customer);
 	}
 }
