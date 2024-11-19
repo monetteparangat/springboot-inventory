@@ -1,6 +1,7 @@
 package com.example.inventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class StockMovementService {
 		return stockMovementRepository.findAll();
 	}
 
-	public StockMovement getStockMovementById(Long id) {
+	public Optional<StockMovement> getStockMovementById(Long id) {
 		return stockMovementRepository.findById(id);
 	}
 
@@ -27,7 +28,8 @@ public class StockMovementService {
 	}
 
 	public StockMovement updateStockMovement(Long id, StockMovement updatedStockMovement) {
-		StockMovement existingStockMovement = stockMovementRepository.findById(id);
+		StockMovement existingStockMovement = stockMovementRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("StockMovement not found"));
 
 		// validate of existing
 		existingStockMovement.setProduct(updatedStockMovement.getProduct());

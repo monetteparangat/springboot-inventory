@@ -1,6 +1,7 @@
 package com.example.inventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class SupplierService {
 		return supplierRepository.findAll();
 	}
 
-	public Supplier getSupplierById(Long id) {
+	public Optional<Supplier> getSupplierById(Long id) {
 		return supplierRepository.findById(id);
 	}
 
@@ -27,7 +28,8 @@ public class SupplierService {
 	}
 
 	public Supplier updateSupplier(Long id, Supplier updatedSupplier) {
-		Supplier existingSupplier = supplierRepository.findById(id);
+		Supplier existingSupplier = supplierRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Supplier not found"));
 
 		// validation if exists
 		existingSupplier.setName(updatedSupplier.getName());

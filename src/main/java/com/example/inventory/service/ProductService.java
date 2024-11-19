@@ -19,7 +19,7 @@ public class ProductService {
 		return productRepository.findAll();
 	}
 
-	public Product getProductById(Long id) {
+	public Optional<Product> getProductById(Long id) {
 		return productRepository.findById(id);
 	}
 
@@ -29,7 +29,8 @@ public class ProductService {
 	}
 
 	public Product updateProduct(Long id, Product updatedProduct) {
-		Product existingProduct = productRepository.findById(id);
+		Product existingProduct = productRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Product not found"));
 
 		// put validation here later id id does not exist
 		existingProduct.setName(updatedProduct.getName());

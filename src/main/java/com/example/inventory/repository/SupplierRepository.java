@@ -1,24 +1,9 @@
 package com.example.inventory.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.inventory.model.Supplier;
 
-public class SupplierRepository {
+public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
-	public List<Supplier> findAll() {
-		return null;
-	}
-
-	public Supplier findById(Long id) {
-		return null;
-	}
-
-	public Supplier save(Supplier supplier) {
-		return null;
-	}
-
-	public void deleteById(Long id) {
-
-	}
 }

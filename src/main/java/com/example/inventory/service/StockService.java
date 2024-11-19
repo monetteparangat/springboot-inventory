@@ -23,13 +23,13 @@ public class StockService {
 		return stockMovementRepository.findAll();
 	}
 
-	public StockMovement getStockMovementById(Long stockMovementId) {
+	public Optional<StockMovement> getStockMovementById(Long stockMovementId) {
 		return stockMovementRepository.findById(stockMovementId);
 	}
 
 	public StockMovement addStockMovement(StockMovement stockMovement) {
 		// Adjust product stock based on movement type
-		Optional<Product> productOpt = Optional.of(productRepository.findById(stockMovement.getProduct().getProductId()));
+		Optional<Product> productOpt = productRepository.findById(stockMovement.getProduct().getProductId());
 		if (productOpt.isPresent()) {
 			Product product = productOpt.get();
 			switch (stockMovement.getTransactionType()) {

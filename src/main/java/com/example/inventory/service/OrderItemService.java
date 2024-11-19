@@ -1,6 +1,7 @@
 package com.example.inventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class OrderItemService {
 		return orderItemRepository.findAll();
 	}
 
-	public OrderItem getOrderItemById(Long id) {
+	public Optional<OrderItem> getOrderItemById(Long id) {
 		return orderItemRepository.findById(id);
 	}
 
@@ -27,7 +28,8 @@ public class OrderItemService {
 	}
 
 	public OrderItem updateOrderItem(Long id, OrderItem updatedOrderItem) {
-		OrderItem existingOrderItem = orderItemRepository.findById(id);
+		OrderItem existingOrderItem = orderItemRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("OrderItem not found"));
 
 		// Validation if id exists
 		existingOrderItem.setOrder(updatedOrderItem.getOrder());

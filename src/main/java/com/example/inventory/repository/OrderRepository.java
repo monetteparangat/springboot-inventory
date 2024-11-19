@@ -1,24 +1,9 @@
 package com.example.inventory.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.inventory.model.Orders;
 
-public class OrderRepository {
+public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-	public List<Orders> findAll() {
-		return null;
-	}
-
-	public Orders findById(Long id) {
-		return null;
-	}
-
-	public Orders save(Orders order) {
-		return null;
-	}
-
-	public Orders deleteById(Long id) {
-		return null;
-	}
 }

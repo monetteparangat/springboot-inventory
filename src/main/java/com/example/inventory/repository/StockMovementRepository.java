@@ -2,23 +2,10 @@ package com.example.inventory.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.example.inventory.model.StockMovement;
 
-public class StockMovementRepository {
+public interface StockMovementRepository extends JpaRepository<StockMovement, Long> {
 
-	public List<StockMovement> findAll() {
-		return null;
-	}
-
-	public StockMovement findById(Long id) {
-		return null;
-	}
-
-	public StockMovement save(StockMovement stockMovement) {
-		return null;
-	}
-
-	public void deleteById(Long id) {
-
-	}
 }
