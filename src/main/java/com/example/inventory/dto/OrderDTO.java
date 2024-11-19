@@ -1,6 +1,6 @@
 package com.example.inventory.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class OrderDTO {
 	private Long orderId;
     private Long customerId;
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     private String orderStatus;
     private String shippingMethod;
     private double totalAmount;
