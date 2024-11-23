@@ -18,7 +18,7 @@ import com.example.inventory.dto.StockMovementDTO;
 import com.example.inventory.service.StockMovementService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/stock-movement")
 public class StockMovementController {
 
 	@Autowired

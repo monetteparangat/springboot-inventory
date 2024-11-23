@@ -22,6 +22,7 @@ public class ProductDTO {
 	private double sellingPrice;
 	private int reorderLevel;
 	private Long supplierId;
+	private Long categoryId;
 	private String barcode;
 	private String location;
 	private LocalDateTime dateAdded;
